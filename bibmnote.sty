@@ -1,0 +1,107 @@
+\ProvidesPackage{bibmnote}[2008/05/05 v1.0]
+
+% marginal notes
+\protected\def\bibmnote#1#2{%
+  \leavevmode \@bsphack \strut
+  \global\advance\marn@cnt\@ne
+  \if@filesw
+    \pdfsavepos
+    \protected@write\tf@marn{}{%
+      #1\space
+      \the\marn@cnt\space
+      \noexpand\the\c@page\space
+      \noexpand\the\pdflastypos\space
+      #2%
+    }%
+    % due to a eTeX (mis)feature, the whatsit nodes in RL text are processed in reversed (LR) order,
+    % so we put \pdfsavepos twice - before and after the \pdflastypos to make sure we always record
+    % the correct point. alternatively, we could use a check for cur_dir but it is not "exported"
+    \pdfsavepos
+  \fi
+  \@ifundefined{put@marn@\the\marn@cnt}{}{%
+    \vadjust{%
+      \@ovri\dp\strutbox \kern-\@ovri
+      \setbox\z@\hb@xt@\hsize{%
+        \expandafter\expandafter\expandafter
+          \do@marn\csname put@marn@\the\marn@cnt\endcsname
+      }%
+      \ht\z@\z@ \dp\z@\@ovri \box\z@
+    }%
+  }%
+  \nobreak\hskip\z@skip
+  \@esphack
+  \ignorespaces
+}
+\def\do@marn#1#2#3{\csname do@marn@#1\endcsname{#2}{#3}}
+% default font used in the margins - could be redefined
+\protected\def\marnfont{\small}
+\newcount\marn@cnt
+\global\marn@cnt=0
+\def\put@marn#1#2#3#4{\@namedef{put@marn@#1}{{#2}{#3}{#4}}}
+\@input{\jobname.marnout}
+\newwrite\tf@marn
+\immediate\openout\tf@marn\jobname.marnin
+% macros which print the marginal notes on the left or right side
+\def\print@marn@right#1{%
+  \kern\hsize\kern\marginparsep\hbox{\marnfont\ignorespaces#1\unskip}\hss
+}
+\def\print@marn@left#1{%
+  \hss\hbox{\marnfont\ignorespaces#1\unskip}\kern\marginparsep\kern\hsize
+}
+% default "styles" of marginal notes: normal and reversed
+% (differ for oneside and twoside typesetting)
+\if@twoside
+\def\do@marn@norm#1#2{%
+  \ifodd#1
+    \print@marn@right{#2}%
+  \else
+    \print@marn@left{#2}%
+  \fi
+}
+\def\do@marn@rev#1#2{%
+  \ifodd#1
+    \print@marn@left{#2}%
+  \else
+    \print@marn@right{#2}%
+  \fi
+}
+\else
+\def\do@marn@norm#1#2{\print@marn@right{#2}}
+\def\do@marn@rev#1#2{\print@marn@left{#2}}
+\fi
+% "styles" used for two-column typesetting: forced left or right side
+\def\do@marn@left#1#2{\print@marn@left{#2}}
+\def\do@marn@right#1#2{\print@marn@right{#2}}
+% \mpr@comma could be redefined to make sure comma is printed in some fixed font
+\def\mpr@comma{\unskip,\space}
+% user interface macros: simplified form of the more generic \bibmnote macro
+\def\bibmarn#1{\bibmnote{norm}{#1}}
+\def\bibrevmarn#1{\bibmnote{rev}{#1}}
+
+% twocolumn hook to record the column numbers
+% (used to decide where to put the marginal notes)
+\@input{twocolumn-hook.tex}
+
+% multicol hook to record the column numbers
+% (used to decide where to put the marginal notes)
+\@input{multicol-hook.tex}
+
+% hook macros
+\newcounter{mc@col@num}
+\def\mc@boxhook@pre{%
+  \setcounter{mc@col@num}\z@
+  \if@filesw
+    \protected@write\tf@marn{}{multicol start \if@twocolumn 2\else\the\col@number\fi}%
+  \fi
+}
+\def\mc@boxhook@in{%
+  \addtocounter{mc@col@num}\@ne
+  \if@filesw
+    \protected@write\tf@marn{}{multicol column \the\c@mc@col@num}%
+  \fi
+}
+\def\mc@boxhook@post{%
+  \if@filesw
+    \protected@write\tf@marn{}{multicol stop}%
+  \fi
+}

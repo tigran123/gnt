@@ -1,0 +1,70 @@
+\documentclass[a5paper]{book}
+\usepackage[greek,chapbookm,luluhb]{bible}
+
+% make TOC fit the page uniformly
+\renewcommand{\bibtocfont}{\fontencoding{LGR}\fontfamily{mak}\fontsize{13}{18.5}\selectfont}
+\renewcommand{\bibtocheadfont}{\normalfont\huge\scshape}
+
+% temporary declaration for 'F' => 'XXX' indicating that
+% the footnote must be revised and the proper witness(es) named
+\declarebibsrc{F}{\te{\textbf{\textcolor{red}{XXX}}}}
+
+\bibmetadata
+{Bibles.org.uk Greek NT (Second Edition - DRAFT)}
+{Greek New Testament (with \totalfnt\ footnotes)}
+{alexandrian,byzantine,majority,textus,receptus,greek,new,testament,stephens,stephanus,1550,alexandrinus,sinaiticus,vaticanus,bezae,ephraemi,washington}
+{20020506120001}
+{Greek}
+
+\def\totalfnvar{}\InputIfFileExists{gnt.fnvar}{}{}
+
+\input select-book
+
+\hyphenation{%
+ma-nu-scripts
+ma-nu-script
+Ober-di-ek
+Vo-lo-vich
+}
+
+\begin{document}
+\pagenumbering{roman}
+\input tex/title\clp
+\input tex/intro
+\input tex/alphabet\clp
+\bibtableofcontents
+\null\clp
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\selectlanguage{polutonikogreek}
+%\fontsize{12.9}{15.55}\selectfont
+\large
+\bibpart{The Books\\Of The New Testament}{New Testament}{NT}
+\include{tex/Mat}
+\include{tex/Mar}
+\include{tex/Luk}
+\include{tex/Joh}
+\include{tex/Act}
+\include{tex/Rom}
+\include{tex/1Co}
+\include{tex/2Co}
+\include{tex/Gal}
+\include{tex/Eph}
+\include{tex/Phi}
+\include{tex/Col}
+\include{tex/1Th}
+\include{tex/2Th}
+\include{tex/1Ti}
+\include{tex/2Ti}
+\include{tex/Tit}
+\include{tex/Phm}
+\include{tex/Heb}
+\include{tex/Jam}
+\include{tex/1Pe}
+\include{tex/2Pe}
+\include{tex/1Jo}
+\include{tex/2Jo}
+\include{tex/3Jo}
+\include{tex/Jud}
+\include{tex/Rev}
+\end{document}

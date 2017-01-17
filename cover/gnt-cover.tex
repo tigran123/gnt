@@ -1,0 +1,76 @@
+\documentclass{book}
+
+\newlength{\spinewidth}
+\setlength{\spinewidth}{1in}
+
+\newlength{\coverwidth}
+\setlength{\coverwidth}{12.85in}
+\addtolength{\coverwidth}{\spinewidth}
+
+\usepackage[pdftex,
+	margin=0.0pt,
+	papersize={\coverwidth,9.55in},
+]{geometry}
+
+\usepackage[greek,british]{babel}
+\languageattribute{greek}{polutoniko}
+\usepackage[T1]{fontenc}
+\usepackage{kerkis}
+\usepackage[pdftex]{color}
+\def\tg{\foreignlanguage{greek}}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\definecolor{bgc}{rgb}{0.1, 0.1, 0.4}
+\definecolor{fgc}{rgb}{1.0, 1.0, 0.8}
+
+\pagecolor{bgc}
+\color{fgc}
+
+\newlength{\bookwidth}
+\setlength{\bookwidth}{6.17in}
+
+\newsavebox{\back}
+\newsavebox{\spine}
+\newsavebox{\front}
+
+\sbox{\spine}{%
+  \parbox{\spinewidth}{%
+    \vspace*{2in}\centering
+    \fontsize{12}{20}\selectfont
+    \tg{H KAINH\\DIAJHKH}\\[0.3in]
+    THE NEW\\
+    COVENANT\\[0.3in]
+    2\textsuperscript{nd} Edition\\
+    (draft)\\[4.17in]
+    \normalsize
+    Bibles.org.uk\\[6mm]
+    2005\vspace*{0.7in}%
+  }%
+}
+
+\sbox{\front}{%
+  \parbox{\bookwidth}{%
+    \vspace*{2in}\centering
+    \fontsize{30}{48}\scshape
+    \tg{H KAINH DIAJHKH}\\
+    \fontsize{24}{48}\selectfont
+    THE NEW COVENANT\\[0.8in]
+    \huge\scshape
+    Second Edition\\
+    (Draft)\\*[4.5in]%
+  }%
+}
+
+\begin{center}
+%\begin{tabular}{|p{\bookwidth}|p{\spinewidth}|p{\bookwidth}|}
+\begin{tabular}{p{\bookwidth}p{\spinewidth}p{\bookwidth}}
+%\hline
+ & \usebox{\spine} & \usebox{\front}\\
+%\hline
+\end{tabular}
+\end{center}
+
+\end{document}
